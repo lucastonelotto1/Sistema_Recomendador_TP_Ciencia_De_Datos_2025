@@ -1,0 +1,20 @@
+1. Caso Cold Start (0 interacciones)
+Estos usuarios existen en la tabla de usuarios pero no han calificado nada. El sistema debería pedirles sus géneros favoritos.
+
+ID: 18 (Santiago Ruiz)
+ID: 19 (Valentina Farias)
+ID: 20 (Violeta Sanchez)
+
+2. Caso Pocas Interacciones (Content-Based Automático)
+Estos usuarios tienen entre 1 y 5 calificaciones. El sistema debería usar esas pocas películas para recomendar por contenido sin preguntar nada.
+
+ID: 63 (Tiene 4 interacciones)
+ID: 16 (Tiene 3 interacciones)
+ID: 2 (Tiene 3 interacciones)
+
+3. Caso Muchas Interacciones (Collaborative Filtering)
+Estos usuarios tienen 6 o más calificaciones. El sistema debería usar el filtro colaborativo (Item-Based).
+
+ID: 22 (Tiene 9 interacciones) - Este es el que tenías configurado.
+ID: 27 (Tiene 9 interacciones)
+ID: 34 (Tiene 8 interacciones)
