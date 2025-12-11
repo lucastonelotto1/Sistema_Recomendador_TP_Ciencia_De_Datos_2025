@@ -22,7 +22,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 app = FastAPI(title="Sistema Recomendador - TP Ciencia de Datos")
 
 # --- INICIALIZACIÓN DE RECOMENDADORES (al arrancar el servidor) ---
-print("🚀 Inicializando Sistema Híbrido de Recomendación...")
+print("Inicializando Sistema de Recomendación...")
 
 print("\n[1/2] Cargando Recomendador Colaborativo (Item-Based)...")
 collab_rec = ItemBasedRecommender()
@@ -32,7 +32,7 @@ print("\n[2/2] Cargando Recomendador de Contenido (Content-Based)...")
 content_rec = ContentBasedRecommender()
 content_rec.load_and_process_data()
 
-print("\n✅ Sistema de recomendación listo.\n")
+print("\n Sistema de recomendación listo.\n")
 
 
 class UserCreate(BaseModel):
