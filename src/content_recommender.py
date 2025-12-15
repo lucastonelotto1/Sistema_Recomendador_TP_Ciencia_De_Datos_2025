@@ -12,7 +12,7 @@ class ContentBasedRecommender:
         self.id_to_index = None
         self.tfidf = None
         
-        # Stopwords
+        # Stopwords, palabras que no aportan valor al texto, a eliminar para no enuciar en el análisis
         self.stopwords_es = [
             "la", "las", "el", "los", "de", "del", "y", "o", "un", "una", "unos", "unas",
             "que", "con", "a", "en", "por", "para", "su", "sus", "al", "es"
@@ -45,17 +45,20 @@ class ContentBasedRecommender:
             else:
                 self.df_movies['descripción'] = ''
 
-        # Crear texto combinado: Genero + Descripción
+        # Crear texto combinado: Genero + Descripción, así obtenemos un solo bloque de texto que represente la esencia de la película
         self.df_movies["texto"] = (
             self.df_movies["genero"].fillna('') + " " + 
             self.df_movies["descripción"].fillna('')
         )
 
-        # 3. Vectorización TF-IDF
+        # 3. Vectorización TF-IDF ( si una palabra aparece en muchos documentos, se reduce su peso, si aparece poco significa que es muy importante)
         self.tfidf = TfidfVectorizer(stop_words=self.stopwords_es)
+
+        # Transformamos el texto en una matriz de TF-IDF donde las columnas son las palabras y las filas son las películas
         self.tfidf_matrix = self.tfidf.fit_transform(self.df_movies["texto"])
 
         # 4. Matriz de Similitud (Coseno)
+        # Calculamos la similitud entre todas las películas
         self.sim_matrix = cosine_similarity(self.tfidf_matrix)
 
         # 5. Mapeo de ID de película a índice del DataFrame

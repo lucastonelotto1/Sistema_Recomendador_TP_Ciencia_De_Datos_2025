@@ -39,13 +39,11 @@ print("\n Sistema de recomendación listo.\n")
 
 class UserCreate(BaseModel):
     username: str
-    attributes: Optional[Dict[str, Any]] = None
 
 
 class User(BaseModel):
     id: int
     username: str
-    attributes: Optional[Dict[str, Any]] = None
 
 
 class RecommendationItem(BaseModel):
@@ -65,8 +63,6 @@ class RecommendationResponse(BaseModel):
 def create_user(user: UserCreate):
     # Insert only the fields we expect; Supabase will generate the id
     payload = {"username": user.username}
-    if user.attributes is not None:
-        payload["attributes"] = user.attributes
 
     # Insert the row; the client returns the created row in `response.data`
     try:
@@ -93,7 +89,7 @@ def create_user(user: UserCreate):
     if created_id is None:
         raise HTTPException(status_code=500, detail="El registro fue creado pero no se devolvió el id")
 
-    return User(id=created_id, username=row.get("username"), attributes=row.get("attributes"))
+    return User(id=created_id, username=row.get("username"))
 
 
 @app.get("/user/{userId}", response_model=User)
@@ -104,7 +100,7 @@ def get_user(userId: int):
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
     row = data[0]
-    return User(id=row.get("id_usuario") or row.get("id"), username=row.get("username"), attributes=row.get("attributes"))
+    return User(id=row.get("id_usuario") or row.get("id"), username=row.get("username"))
 
 
 @app.get("/user/{userId}/recommend", response_model=RecommendationResponse)
@@ -157,10 +153,9 @@ def recommend(
                 }
             )
 
-    # --- 2. Rellenar con Aleatorias (si corresponde) ---
+    #2. Rellenar con Aleatorias
     if n_random > 0:
         # Recuperar IDs de películas que YA vio el usuario para no recomendarlas
-        # Usamos collab_rec.df_merged que tiene todo el historial
         watched_ids = set()
         if collab_rec.df_merged is not None:
              hist = collab_rec.df_merged[collab_rec.df_merged['id_usuario'] == userId]
